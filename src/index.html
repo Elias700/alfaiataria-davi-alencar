@@ -1,13 +1,43 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>LandingPageDavi</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Alfaiataria Davi Alencar | Ternos e Camisas Sob Medida</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      // Roda antes da primeira pintura.
+      // - js-anim: libera os estados iniciais "escondidos" das animações. Sem JS (ou com
+      //   prefers-reduced-motion) a classe não entra e todo o conteúdo fica visível.
+      //   Se as animações não iniciarem em 6s, a classe sai e o conteúdo aparece.
+      // - has-intro: o loader só roda na primeira visita da sessão.
+      (function (d) {
+        var h = d.documentElement;
+        var reduced = false;
+        try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+        if (!reduced) {
+          h.classList.add('js-anim');
+          setTimeout(function () {
+            if (!h.classList.contains('anim-ready')) h.classList.remove('js-anim');
+          }, 6000);
+        }
+        var visited = null;
+        try {
+          visited = sessionStorage.getItem('da-visited');
+          sessionStorage.setItem('da-visited', '1');
+        } catch (e) {}
+        if (!visited && !reduced) h.classList.add('has-intro');
+      })(document);
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
 </html>

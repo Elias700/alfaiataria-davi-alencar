@@ -1,0 +1,5 @@
+# TODO: trocar https://SEU-DOMINIO pelo domínio de produção (BRAND.siteUrl em src/app/core/data/site-content.ts).
+User-agent: *
+Allow: /
+
+Sitemap: https://SEU-DOMINIO/sitemap.xml

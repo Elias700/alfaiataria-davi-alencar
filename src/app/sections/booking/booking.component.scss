@@ -1,0 +1,332 @@
+@use 'mixins' as *;
+
+// ---------- Faixa com foto (A20) ----------
+.booking__band {
+  position: relative;
+
+  :host-context(.js-anim) & {
+    height: 170svh;
+  }
+}
+
+.booking__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  overflow: clip;
+
+  :host-context(.js-anim) & {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+}
+
+.booking__img {
+  position: absolute;
+  inset: 0;
+
+  img {
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+}
+
+.booking__shade {
+  position: absolute;
+  inset: 0;
+  background: rgb(4 11 37 / 0.66);
+}
+
+.booking__band-content {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-m);
+  text-align: center;
+  padding-block: var(--space-xl);
+}
+
+.booking__title {
+  font-size: clamp(2.6rem, 1.2rem + 6vw, 8.5rem);
+
+  > span:nth-child(2) {
+    padding-left: 0;
+  }
+}
+
+.booking__lead {
+  max-width: 34ch;
+  color: var(--fg-muted);
+}
+
+.booking__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-s);
+}
+
+// ---------- Formulário ----------
+.booking__body {
+  display: grid;
+  gap: var(--space-l);
+  padding-block: var(--space-xl) var(--space-section);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: start;
+  }
+}
+
+.booking__panel {
+  padding: clamp(1.5rem, 1rem + 3vw, 4rem);
+  border-radius: var(--radius);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-m);
+
+  @include up($bp-md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// Campo com label flutuante (initForm do clone: classe "focused").
+.field {
+  position: relative;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.field__input {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 1.4rem 0 0.5rem;
+  border: 0;
+  border-bottom: 1px solid var(--fg-muted);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fg);
+  font-size: 1rem;
+  appearance: none;
+  transition: border-color var(--dur-s) var(--ease);
+
+  &:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    box-shadow: 0 1px 0 0 var(--accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+}
+
+select.field__input {
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 10px) 60%,
+    calc(100% - 5px) 60%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 1.5rem;
+}
+
+.field__input--area {
+  min-height: 7rem;
+  padding-top: 1.75rem;
+}
+
+.field__label {
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  color: var(--fg-muted);
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform var(--dur-s) var(--ease-out),
+    color var(--dur-s) var(--ease-out);
+}
+
+.field__input:focus + .field__label,
+.field__input:not(:placeholder-shown) + .field__label,
+.field--static .field__label {
+  transform: translateY(-0.95rem) scale(0.78);
+}
+
+.field__input:focus + .field__label {
+  color: var(--accent);
+}
+
+.field__hint {
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+.field__error {
+  font-size: var(--fs-small);
+  color: var(--error);
+  font-weight: 500;
+}
+
+.is-invalid .field__input {
+  border-bottom-color: var(--error);
+}
+
+.choice {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.choice__legend {
+  padding: 0;
+  margin-bottom: 0.75rem;
+  color: var(--fg-muted);
+}
+
+.choice__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.choice__opt {
+  position: relative;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0.5rem 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      background-color var(--dur-s) var(--ease),
+      color var(--dur-s) var(--ease),
+      border-color var(--dur-s) var(--ease);
+  }
+
+  input:checked + span {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+.choice.is-invalid .choice__opt span {
+  border-color: var(--error);
+}
+
+.consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 0.85rem;
+  align-items: start;
+
+  input {
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0.1rem 0 0;
+    accent-color: var(--c-ink);
+  }
+
+  label {
+    color: var(--fg-muted);
+  }
+
+  .field__error {
+    grid-column: 2;
+  }
+}
+
+.consent__link {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  color: var(--fg);
+  min-height: 1.5rem;
+}
+
+.form__submit {
+  justify-self: start;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+.form__msg {
+  padding: 1rem 1.25rem;
+  border-left: 2px solid var(--accent);
+  background: rgb(4 11 37 / 0.04);
+
+  .link {
+    margin-left: 0.25rem;
+  }
+}
+
+.form__msg--ok {
+  border-color: #2e7d32;
+}
+
+.form__msg--err {
+  border-color: var(--error);
+}
+
+// ---------- Informações ----------
+.booking__info {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.info {
+  display: flex;
+  gap: 0.85rem;
+  color: var(--fg-muted);
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.booking__map {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  filter: grayscale(0.4);
+}
+
+.booking__map--placeholder {
+  background: var(--c-navy);
+}

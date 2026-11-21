@@ -1,0 +1,158 @@
+@use 'mixins' as *;
+
+.suits__grid {
+  display: grid;
+  gap: var(--space-xl);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.suits__figure {
+  position: relative;
+}
+
+// Proporção da foto original (3:4) para os pontos ficarem no lugar certo.
+.suits__media {
+  aspect-ratio: 3 / 4;
+}
+
+.suits__body {
+  display: grid;
+  gap: var(--space-l);
+  align-content: center;
+}
+
+.suits__text {
+  max-width: 38ch;
+}
+
+.suits__cta {
+  justify-self: start;
+}
+
+// ---------- Pontos sobre a foto ----------
+.hotspots {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.hotspot {
+  position: absolute;
+  translate: -50% -50%;
+  pointer-events: auto;
+
+  &:hover,
+  &:focus-within,
+  &.is-open {
+    z-index: 2;
+  }
+}
+
+.hotspot__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+}
+
+.hotspot__dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid var(--c-linen);
+  border-radius: 50%;
+  background: rgb(4 11 37 / 0.45);
+  color: var(--c-linen);
+  font-size: 0.8rem;
+  backdrop-filter: blur(4px);
+  transition: transform var(--dur-m) var(--ease-out);
+}
+
+.hotspot:hover .hotspot__dot,
+.hotspot:focus-within .hotspot__dot,
+.hotspot.is-open .hotspot__dot {
+  transform: rotate(-90deg);
+}
+
+// Pulso (A28): anel cresce 1 → 1.6 e some, em loop, com 0.2s de defasagem.
+.hotspot__pulse {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin: -0.95rem 0 0 -0.95rem;
+  border: 1px solid var(--c-linen);
+  border-radius: 50%;
+  animation: pulse var(--dur-l) var(--ease-in) infinite;
+}
+
+.hotspot__pulse--b {
+  animation-delay: 0.2s;
+}
+
+.hotspot__tip {
+  position: absolute;
+  left: calc(100% + 0.25rem);
+  top: 50%;
+  display: grid;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: min(16rem, 60vw);
+  padding: 0.85rem 1rem;
+  background: var(--c-linen);
+  color: var(--c-ink);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  box-shadow: 0 1rem 2rem rgb(0 0 0 / 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-0.5rem, -50%);
+  transition:
+    opacity var(--dur-s) var(--ease-out),
+    transform var(--dur-m) var(--ease-out),
+    visibility 0s linear var(--dur-s);
+
+  strong {
+    color: var(--c-gold-deep);
+  }
+}
+
+.hotspot.is-left .hotspot__tip {
+  left: auto;
+  right: calc(100% + 0.25rem);
+  transform: translate(0.5rem, -50%);
+}
+
+.hotspot:hover .hotspot__tip,
+.hotspot:focus-within .hotspot__tip,
+.hotspot.is-open .hotspot__tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+  transition:
+    opacity var(--dur-s) var(--ease-out),
+    transform var(--dur-m) var(--ease-out),
+    visibility 0s;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}

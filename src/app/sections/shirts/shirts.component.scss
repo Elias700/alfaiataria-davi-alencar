@@ -1,0 +1,132 @@
+@use 'mixins' as *;
+
+// ---------- Intro: título + "janela" ----------
+// Padrão (mobile, sem JS ou movimento reduzido): título e foto empilhados.
+.shirts__intro {
+  position: relative;
+  padding-top: var(--space-section);
+}
+
+.shirts__stage {
+  display: grid;
+  gap: var(--space-l);
+}
+
+.shirts__title {
+  display: grid;
+  padding-inline: var(--gutter);
+  font-size: clamp(2.8rem, 1.4rem + 6.4vw, 9.5rem);
+}
+
+.shirts__t2 {
+  justify-self: end;
+}
+
+.shirts__window {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin-inline: var(--gutter);
+  overflow: hidden;
+  background: var(--c-navy);
+}
+
+.shirts__window-img {
+  position: absolute;
+  inset: 0;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.shirts__window-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(4 11 37 / 0.75) 0%, rgb(4 11 37 / 0) 45%);
+}
+
+.shirts__caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--space-m);
+  --accent: var(--c-gold);
+}
+
+// Desktop com animação: palco fixo, janela em tela cheia recortada pelo clip-path (A19).
+@include up($bp-lg) {
+  :host-context(.js-anim) {
+    .shirts__intro {
+      height: 240svh;
+      padding-top: 0;
+    }
+
+    .shirts__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      overflow: clip;
+      display: block;
+    }
+
+    .shirts__title {
+      position: absolute;
+      inset: calc(var(--header-h) + 1rem) 0 2rem;
+      z-index: 2;
+      align-content: space-between;
+      pointer-events: none;
+    }
+
+    .shirts__window {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      aspect-ratio: auto;
+      clip-path: inset(24% 35% 24% 35%);
+    }
+
+    .shirts__caption {
+      left: calc(var(--gutter) + 2.5rem);
+      bottom: var(--space-l);
+    }
+  }
+}
+
+// ---------- Corpo: foto fixa + texto rolando ----------
+.shirts__body {
+  display: grid;
+  gap: var(--space-l);
+
+  @include up($bp-lg) {
+    grid-template-columns: 5fr 6fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+}
+
+.shirts__aside {
+  @include up($bp-lg) {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+}
+
+.shirts__detail {
+  aspect-ratio: 1;
+}
+
+.shirts__content {
+  display: grid;
+  gap: var(--space-l);
+
+  @include up($bp-lg) {
+    padding-block: var(--space-xl);
+  }
+}
+
+.shirts__text {
+  max-width: 38ch;
+}
+
+.shirts__cta {
+  justify-self: start;
+}

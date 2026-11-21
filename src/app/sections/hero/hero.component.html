@@ -1,0 +1,74 @@
+<section id="inicio" class="hero theme-dark" data-bg="dark" aria-labelledby="hero-title">
+  <div #area class="hero__area">
+    <div class="hero__stage">
+      <div #bg class="hero__bg">
+        @for (tab of hero.tabs; track tab.id; let first = $first) {
+          <div class="hero__img" [class.is-active]="active() === tab.id">
+            <img
+              [ngSrc]="tab.photo.src"
+              fill
+              [priority]="first"
+              sizes="100vw"
+              [alt]="tab.photo.alt"
+            />
+          </div>
+        }
+        <div #overlay class="hero__overlay"></div>
+      </div>
+
+      <div #content class="hero__content container">
+        <h1 id="hero-title" class="hero__h1 intro intro--slide" style="--d: 0s">
+          <span>{{ hero.h1Brand }}</span>
+          <span class="hero__h1-sep" aria-hidden="true"></span>
+          <span>{{ hero.h1Products }}</span>
+        </h1>
+
+        <!-- A3 (animateTextA): letras giram no eixo X vindo da direita. CSS puro: começa na
+             primeira pintura, sem esperar o JS (bom para o LCP). -->
+        <p class="display hero__display">
+          <span class="visually-hidden">{{ hero.display.join(' ') }}</span>
+          @for (line of displayLines; track $index; let li = $index) {
+            <span class="hero__line" [class.italic]="li === 1" aria-hidden="true">
+              @for (word of line; track $index) {
+                <span class="hero__word">
+                  @for (ch of word; track $index) {
+                    <span class="hero__char" [style.--i]="ch.i">{{ ch.c }}</span>
+                  }</span
+                >{{ ' ' }}
+              }
+            </span>
+          }
+        </p>
+
+        <p class="lead hero__lead intro intro--slide" style="--d: 0.45s">{{ hero.lead }}</p>
+
+        <div class="hero__actions intro" style="--d: 0.6s">
+          <a class="btn" appAnchor="#agendar" href="#agendar">
+            {{ ctaLabel }}
+            <app-icon name="arrow-right" />
+          </a>
+          <div class="hero__tabs" role="group" aria-label="Foto em destaque">
+            @for (tab of hero.tabs; track tab.id; let last = $last) {
+              <button
+                type="button"
+                class="hero__tab"
+                [class.is-active]="active() === tab.id"
+                [attr.aria-pressed]="active() === tab.id"
+                (click)="select(tab.id)"
+              >
+                {{ tab.label }}
+              </button>
+              @if (!last) {
+                <span class="hero__tab-divider" aria-hidden="true"></span>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__circle intro intro--fade" style="--d: 0.9s">
+        <app-circle-cta label="Agende sua prova" href="#agendar" />
+      </div>
+    </div>
+  </div>
+</section>

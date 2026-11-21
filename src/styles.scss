@@ -1,0 +1,312 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+@use 'reset';
+@use 'typography';
+
+// ---------- Temas por seção ----------
+:root,
+.theme-dark {
+  @include theme-dark;
+}
+
+.theme-light {
+  @include theme-light;
+}
+
+.theme-color {
+  @include theme-color;
+}
+
+.theme-dark,
+.theme-light,
+.theme-color {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+html {
+  background: var(--c-ink);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: clip;
+  min-height: 100svh;
+}
+
+::selection {
+  background: var(--c-gold);
+  color: var(--c-ink);
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+// ---------- Utilitários ----------
+.container {
+  @include container;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+.skip-link {
+  @include label;
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2000;
+  padding: 0.9rem 1.25rem;
+  background: var(--c-gold);
+  color: var(--c-ink);
+  transform: translateY(-200%);
+  transition: transform var(--dur-s) var(--ease-out);
+
+  &:focus-visible {
+    transform: none;
+  }
+}
+
+/** Monograma DA como máscara: herda a cor do texto (branco, marinho ou dourado). */
+.monogram {
+  display: block;
+  aspect-ratio: 1;
+  background-color: currentColor;
+  -webkit-mask: url('/images/monograma-da-256.webp') center / contain no-repeat;
+  mask: url('/images/monograma-da-256.webp') center / contain no-repeat;
+}
+
+.monogram--lg {
+  -webkit-mask-image: url('/images/monograma-da-768.webp');
+  mask-image: url('/images/monograma-da-768.webp');
+}
+
+// ---------- Botões ----------
+.btn {
+  @include label;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: var(--tap);
+  padding: 1rem 1.75rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+  text-align: center;
+  transition:
+    background-color var(--dur-s) var(--ease-out),
+    color var(--dur-s) var(--ease-out),
+    border-color var(--dur-s) var(--ease-out);
+
+  @include pointer-fine {
+    &:hover {
+      background: transparent;
+      color: var(--fg);
+    }
+  }
+
+  svg {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+  }
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--line);
+
+  @include pointer-fine {
+    &:hover {
+      border-color: var(--accent);
+      background: transparent;
+      color: var(--fg);
+    }
+  }
+}
+
+/** Link com sublinhado que se recolhe e volta (hover-link do clone). */
+.link {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.25em;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.1em;
+    height: 1px;
+    background: currentColor;
+    transform-origin: right center;
+    transition: transform var(--dur-m) var(--ease-out);
+  }
+
+  @include pointer-fine {
+    &:hover::after {
+      transform: scaleX(0);
+    }
+  }
+}
+
+// ---------- Texto com hover de letras (app-roll-text; A25/A26 do clone) ----------
+.roll {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.roll__rows {
+  position: relative;
+  display: block;
+  overflow: clip;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+
+.roll__row {
+  display: block;
+  white-space: pre;
+}
+
+.roll__row--clone {
+  position: absolute;
+  inset: 0.08em 0 auto;
+}
+
+.roll__char {
+  display: inline-block;
+  transition:
+    transform var(--dur-m) var(--ease),
+    opacity var(--dur-m) var(--ease);
+  transition-delay: calc(var(--i) / max(var(--n) - 1, 1) * 0.2s);
+}
+
+.roll__row--clone .roll__char {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.roll--flip .roll__char {
+  transition-timing-function: var(--ease-out);
+}
+
+.roll--flip .roll__row--clone .roll__char {
+  transform: translateX(-0.4em) translateY(25%) rotateY(90deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .roll-trigger:hover .roll__row:not(.roll__row--clone) .roll__char {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  .roll-trigger:hover .roll--flip .roll__row:not(.roll__row--clone) .roll__char {
+    transform: translateX(0.4em) translateY(-25%) rotateY(-90deg);
+  }
+
+  .roll-trigger:hover .roll__row--clone .roll__char {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.roll-trigger:focus-visible .roll__row:not(.roll__row--clone) .roll__char {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.roll-trigger:focus-visible .roll__row--clone .roll__char {
+  transform: none;
+  opacity: 1;
+}
+
+// ---------- Seções ----------
+.section {
+  position: relative;
+  padding-block: var(--space-section);
+  overflow-x: clip;
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-m);
+  margin-bottom: var(--space-l);
+}
+
+.section-title {
+  display: grid;
+
+  > span {
+    display: block;
+  }
+
+  > span:nth-child(2) {
+    font-style: italic;
+    padding-left: 0.6em;
+  }
+}
+
+/** Container de imagem com proporção reservada (sem CLS). */
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-navy);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+// ---------- Estado inicial das animações ----------
+// Só vale com JS ativo (classe js-anim colocada no <html> por um script inline).
+// As diretivas aplicam o estado inicial via GSAP e removem o visibility:hidden.
+.js-anim [data-anim]:not([data-anim-ready]) {
+  visibility: hidden;
+}
+
+.split-line-mask {
+  overflow: clip;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+
+// ---------- Lenis (smooth scroll) ----------
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+// Scroll travado (menu e modais abertos)
+html.is-locked {
+  overflow: hidden;
+
+  body {
+    padding-right: var(--scrollbar-width, 0);
+  }
+}

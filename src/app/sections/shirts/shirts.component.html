@@ -1,0 +1,55 @@
+<section id="camisas" class="shirts theme-light" data-bg="light" aria-labelledby="shirts-title">
+  <div #intro class="shirts__intro">
+    <div class="shirts__stage">
+      <h2 id="shirts-title" class="h2 shirts__title">
+        <span #t1 class="shirts__t1">{{ s.title[0] }}</span>
+        <span #t2 class="shirts__t2 italic">{{ s.title[1] }}</span>
+      </h2>
+
+      <div #win class="shirts__window">
+        <div #winImg class="shirts__window-img">
+          <img [ngSrc]="s.photo.src" fill sizes="100vw" [alt]="s.photo.alt" />
+        </div>
+        <div class="shirts__window-shade" aria-hidden="true"></div>
+        <p #caption class="shirts__caption">
+          <span class="eyebrow">{{ s.eyebrow }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container shirts__body section">
+    <div class="shirts__aside">
+      <div class="media shirts__detail" appImageMask>
+        <img
+          appImageZoom="out"
+          [ngSrc]="s.detailPhoto.src"
+          fill
+          sizes="(min-width: 992px) 38vw, 92vw"
+          [alt]="s.detailPhoto.alt"
+        />
+      </div>
+    </div>
+
+    <div class="shirts__content">
+      <p class="lead shirts__text" appSplitText="lines">{{ s.text }}</p>
+      <div appReveal="ctn" [revealDelay]="0.15">
+        <app-option-tabs
+          [options]="s.options"
+          label="Personalização da camisa"
+          idPrefix="shirts-options"
+        />
+      </div>
+      <a
+        class="btn shirts__cta"
+        appAnchor="#agendar"
+        href="#agendar"
+        appReveal="ctn"
+        [revealDelay]="0.25"
+      >
+        {{ ctaLabel }}
+        <app-icon name="arrow-right" />
+      </a>
+    </div>
+  </div>
+</section>

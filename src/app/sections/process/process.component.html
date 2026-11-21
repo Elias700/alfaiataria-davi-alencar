@@ -1,0 +1,55 @@
+<section id="processo" class="process theme-color" data-bg="color" aria-labelledby="process-title">
+  <div #area class="process__area">
+    <div #stage class="process__stage">
+      <div #track class="process__track">
+        <div class="process__intro">
+          <p class="eyebrow">{{ p.eyebrow }}</p>
+          <h2 id="process-title" class="h2 process__title">
+            <span class="process__tl">{{ p.title[0] }}</span>
+            <span class="process__tl italic">{{ p.title[1] }}</span>
+          </h2>
+          <p class="lead muted process__lead">{{ p.intro }}</p>
+        </div>
+
+        <div class="process__steps-wrap">
+          <span #thread class="process__thread" aria-hidden="true"></span>
+          <ol class="process__steps" role="list">
+            @for (step of p.steps; track step.title; let i = $index) {
+              <li class="step" [class.step--photo]="step.photo">
+                <span class="step__num" data-step-part aria-hidden="true">{{
+                  (i + 1).toString().padStart(2, '0')
+                }}</span>
+                <span class="step__knot" aria-hidden="true"></span>
+                @if (step.photo) {
+                  <div class="media step__media" data-step-part>
+                    <img
+                      [ngSrc]="step.photo.src"
+                      fill
+                      sizes="(min-width: 992px) 22vw, 80vw"
+                      [alt]="step.photo.alt"
+                    />
+                  </div>
+                }
+                <h3 class="h3 step__title" data-step-part>
+                  <span class="visually-hidden">Etapa {{ i + 1 }}: </span>{{ step.title }}
+                </h3>
+                <p class="muted step__text" data-step-part>{{ step.text }}</p>
+                @if (step.duration) {
+                  <p class="label step__duration" data-step-part>{{ step.duration }}</p>
+                }
+              </li>
+            }
+          </ol>
+        </div>
+
+        <div class="process__end">
+          <p class="h3 italic" data-step-part>Pronto para a primeira etapa?</p>
+          <a class="btn" appAnchor="#agendar" href="#agendar" data-step-part>
+            {{ ctaLabel }}
+            <app-icon name="arrow-right" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

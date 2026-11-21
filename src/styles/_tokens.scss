@@ -1,0 +1,92 @@
+// Design tokens — Alfaiataria Davi Alencar.
+// Paleta amostrada do logo e das etiquetas (scripts de análise da Fase 0/1):
+// marinho do logo #040B25, marinho da etiqueta #1A2B4E, dourado do bordado #BCA360.
+
+:root {
+  // Cores de marca
+  --c-ink: #040b25;
+  --c-navy: #0b1636;
+  --c-navy-2: #1a2b4e;
+  --c-gold: #bca360;
+  --c-gold-deep: #7a5f22; // dourado para texto sobre fundo claro (contraste ≥ 4.5:1)
+  --c-oxblood: #33130f; // couro da poltrona do ateliê; usado como 3º tema
+  --c-linen: #f2eee6;
+  --c-sand: #e4dccd;
+  --c-white: #ffffff;
+  --c-error: #b3261e;
+  --c-error-on-dark: #ffb4ab;
+
+  // Movimento (constantes extraídas do clone: durS/durM/durL, stagger, easings)
+  --dur-s: 0.4s;
+  --dur-m: 0.8s;
+  --dur-l: 1.2s;
+  --stagger: 0.1s;
+  --ease-in-out: cubic-bezier(0.75, 0, 0.25, 1);
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-dive: cubic-bezier(0.6, 0, 0, 1);
+
+  // Tipografia
+  --ff-serif: 'Bodoni Moda', 'Didot', 'Bodoni 72', Georgia, serif;
+  --ff-sans: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
+
+  --fs-display: clamp(3.4rem, 1.6rem + 9.2vw, 13.5rem);
+  --fs-h2: clamp(2.6rem, 1.5rem + 5.2vw, 7.5rem);
+  --fs-h3: clamp(1.6rem, 1.25rem + 1.5vw, 2.9rem);
+  --fs-h4: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --fs-lead: clamp(1.125rem, 1rem + 0.6vw, 1.55rem);
+  --fs-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --fs-small: 0.875rem;
+  --fs-label: 0.75rem;
+  --ls-label: 0.22em;
+
+  // Espaços e layout
+  --gutter: clamp(1rem, 0.4rem + 2.8vw, 3rem);
+  --space-xs: 0.5rem;
+  --space-s: 1rem;
+  --space-m: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  --space-l: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+  --space-xl: clamp(4rem, 2.5rem + 6vw, 8rem);
+  --space-section: clamp(5.5rem, 3rem + 10vw, 12rem);
+  --container: 90rem;
+  --header-h: 4.5rem;
+  --radius: 2px;
+  --tap: 2.75rem; // 44px
+
+  @media (min-width: 992px) {
+    --header-h: 5.5rem;
+  }
+}
+
+// Temas por seção (como os temas light/dark/color do clone).
+// --bg, --fg, --fg-muted, --line e --accent são consumidos por todos os componentes.
+@mixin theme-dark {
+  --bg: var(--c-ink);
+  --fg: var(--c-linen);
+  --fg-muted: rgb(242 238 230 / 0.74);
+  --line: rgb(242 238 230 / 0.18);
+  --accent: var(--c-gold);
+  --accent-fg: var(--c-ink);
+  --error: var(--c-error-on-dark);
+}
+
+@mixin theme-light {
+  --bg: var(--c-linen);
+  --fg: var(--c-ink);
+  --fg-muted: rgb(4 11 37 / 0.74);
+  --line: rgb(4 11 37 / 0.14);
+  --accent: var(--c-gold-deep);
+  --accent-fg: var(--c-linen);
+  --error: var(--c-error);
+}
+
+@mixin theme-color {
+  --bg: var(--c-oxblood);
+  --fg: var(--c-linen);
+  --fg-muted: rgb(242 238 230 / 0.76);
+  --line: rgb(242 238 230 / 0.2);
+  --accent: var(--c-gold);
+  --accent-fg: var(--c-ink);
+  --error: var(--c-error-on-dark);
+}

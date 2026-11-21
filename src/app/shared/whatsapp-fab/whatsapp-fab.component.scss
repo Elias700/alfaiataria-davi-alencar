@@ -1,0 +1,44 @@
+.fab {
+  position: fixed;
+  right: max(var(--gutter), env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 950;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid var(--c-gold);
+  border-radius: 50%;
+  background: var(--c-ink);
+  color: var(--c-gold);
+  font-size: 1.35rem;
+  box-shadow: 0 0.75rem 2rem rgb(4 11 37 / 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(2rem);
+  transition:
+    opacity var(--dur-m) var(--ease-out),
+    transform var(--dur-l) var(--ease-out),
+    visibility 0s linear var(--dur-m),
+    background-color var(--dur-s) var(--ease-out),
+    color var(--dur-s) var(--ease-out);
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity var(--dur-m) var(--ease-out),
+      transform var(--dur-l) var(--ease-out),
+      visibility 0s,
+      background-color var(--dur-s) var(--ease-out),
+      color var(--dur-s) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--c-gold);
+      color: var(--c-ink);
+    }
+  }
+}

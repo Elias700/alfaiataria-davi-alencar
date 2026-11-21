@@ -1,0 +1,169 @@
+@use 'mixins' as *;
+
+.slider {
+  display: grid;
+  gap: var(--space-l);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1.15fr 1fr;
+    gap: var(--space-xl);
+    align-items: end;
+  }
+}
+
+.slider__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--c-navy);
+}
+
+// Troca de slide (A8 animateSlide): a foto nova abre por um clip-path diagonal
+// enquanto desfaz o zoom; a anterior fica embaixo até ser coberta.
+.slide {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  clip-path: polygon(100% 0%, 100% 0%, 101% 100%, 125% 100%);
+
+  &.is-prev {
+    z-index: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  &.is-active {
+    z-index: 2;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transition: clip-path var(--dur-l) var(--ease-in-out);
+  }
+}
+
+.slide__img {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.5) translateX(25%);
+
+  img {
+    object-fit: cover;
+  }
+
+  .is-prev &,
+  .is-active & {
+    transform: none;
+  }
+
+  .is-active & {
+    transition: transform var(--dur-l) var(--ease-in-out);
+  }
+}
+
+.slider__zoom {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+  background: rgb(4 11 37 / 0.55);
+  color: var(--c-linen);
+  backdrop-filter: blur(6px);
+}
+
+.slider__info {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.slider__count {
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+.slider__current {
+  color: var(--accent);
+}
+
+.slider__text {
+  display: grid;
+  gap: var(--space-s);
+  min-height: 9rem;
+}
+
+.slider__title,
+.slider__caption {
+  overflow: clip;
+
+  span {
+    display: block;
+    animation: text-in var(--dur-l) var(--ease-out) both;
+  }
+}
+
+.slider__caption span {
+  animation-delay: 0.1s;
+}
+
+.slider__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.slider__progress {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  margin-right: var(--space-s);
+  background: var(--line);
+}
+
+.slider__bar {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: progress 6s linear forwards paused;
+
+  &.is-running {
+    animation-play-state: running;
+  }
+}
+
+.slider__btn {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: border-color var(--dur-s) var(--ease);
+
+  @include pointer-fine {
+    &:hover {
+      border-color: var(--accent);
+    }
+  }
+}
+
+@keyframes progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes text-in {
+  from {
+    transform: translateY(110%);
+  }
+}
+
+@include reduced-motion {
+  .slider__bar {
+    display: none;
+  }
+}

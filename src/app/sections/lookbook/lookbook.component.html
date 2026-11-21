@@ -1,0 +1,105 @@
+<section
+  id="lookbook"
+  class="lookbook section theme-dark"
+  data-bg="dark"
+  aria-labelledby="lookbook-title"
+>
+  <div class="container">
+    <div class="section-head lookbook__head">
+      <p class="eyebrow" appReveal="fade">{{ l.eyebrow }}</p>
+      <h2 id="lookbook-title" class="h2" appSplitText="chars">{{ l.title }}</h2>
+    </div>
+
+    <div
+      #root
+      class="slider"
+      role="region"
+      aria-roledescription="carrossel"
+      aria-label="Peças da casa"
+      (mouseenter)="setHover(true)"
+      (mouseleave)="setHover(false)"
+      (focusin)="setHover(true)"
+      (focusout)="onFocusOut($event)"
+      appReveal="ctn"
+    >
+      <div class="slider__frame">
+        @for (slide of l.slides; track slide.photo.src; let i = $index) {
+          <div
+            class="slide"
+            [class.is-active]="active() === i"
+            [class.is-prev]="prev() === i"
+            role="group"
+            aria-roledescription="slide"
+            [attr.aria-label]="pad(i + 1) + ' de ' + pad(l.slides.length)"
+            [attr.aria-hidden]="active() === i ? null : 'true'"
+          >
+            <div class="slide__img">
+              <img
+                [ngSrc]="slide.photo.src"
+                fill
+                sizes="(min-width: 992px) 46vw, 92vw"
+                [alt]="slide.photo.alt"
+                [style.object-position]="slide.position"
+              />
+            </div>
+          </div>
+        }
+        <button
+          type="button"
+          class="slider__zoom"
+          (click)="openLightbox()"
+          aria-label="Ampliar foto"
+        >
+          <app-icon name="zoom" />
+        </button>
+      </div>
+
+      <div class="slider__info">
+        <p class="label slider__count" aria-hidden="true">
+          <span class="slider__current">{{ pad(active() + 1) }}</span> / {{ pad(l.slides.length) }}
+        </p>
+
+        <div class="slider__text" [attr.aria-live]="playing() ? 'off' : 'polite'">
+          @for (s of current(); track s.photo.src) {
+            <h3 class="h3 slider__title">
+              <span>{{ s.title }}</span>
+            </h3>
+            <p class="muted slider__caption">
+              <span>{{ s.caption }}</span>
+            </p>
+          }
+        </div>
+
+        <div class="slider__controls">
+          <span class="slider__progress" aria-hidden="true">
+            @for (k of [active()]; track k) {
+              <span
+                class="slider__bar"
+                [class.is-running]="playing()"
+                (animationend)="onProgressEnd()"
+              ></span>
+            }
+          </span>
+          <button type="button" class="slider__btn" (click)="go(-1)" aria-label="Foto anterior">
+            <app-icon name="arrow-left" />
+          </button>
+          <button type="button" class="slider__btn" (click)="go(1)" aria-label="Próxima foto">
+            <app-icon name="arrow-right" />
+          </button>
+          <button
+            type="button"
+            class="slider__btn"
+            (click)="userPaused.set(!userPaused())"
+            [attr.aria-label]="
+              userPaused() ? 'Retomar troca automática' : 'Pausar troca automática'
+            "
+          >
+            <app-icon [name]="userPaused() ? 'play' : 'pause'" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-lightbox [photos]="photos" />
+</section>

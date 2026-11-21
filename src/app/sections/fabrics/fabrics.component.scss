@@ -1,0 +1,74 @@
+@use 'mixins' as *;
+
+.fabrics__head {
+  display: grid;
+  gap: var(--space-m);
+  margin-bottom: var(--space-l);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: end;
+
+    .section-head {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.fabrics__text {
+  max-width: 36ch;
+}
+
+.fabrics__grid {
+  display: grid;
+  gap: var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.texture {
+  display: grid;
+  gap: var(--space-s);
+
+  @include up($bp-md) {
+    &:nth-child(2) {
+      margin-top: var(--space-xl);
+    }
+  }
+}
+
+.texture__media {
+  aspect-ratio: 4 / 5;
+}
+
+// Zoom no hover (scale 1.1 · durM · Out, padrão do clone).
+.texture__zoom {
+  position: absolute;
+  inset: 0;
+  transition: transform var(--dur-m) var(--ease-out);
+}
+
+@include pointer-fine {
+  .texture:hover .texture__zoom {
+    transform: scale(1.1);
+  }
+}
+
+.texture__label {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.texture__num {
+  color: var(--accent);
+}
+
+.fabrics__marquee {
+  margin-top: var(--space-xl);
+  color: var(--fg);
+}

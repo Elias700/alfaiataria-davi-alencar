@@ -1,0 +1,118 @@
+@use 'mixins' as *;
+@use 'tokens' as *;
+
+.lightbox {
+  @include theme-dark;
+  width: 100vw;
+  max-width: none;
+  height: 100svh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--c-ink);
+  color: var(--fg);
+  overflow: hidden;
+
+  &[open] {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    animation: lb-in var(--dur-m) var(--ease-out);
+  }
+
+  &::backdrop {
+    background: var(--c-ink);
+  }
+}
+
+.lightbox__top,
+.lightbox__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  padding: var(--space-s) var(--gutter);
+}
+
+.lightbox__nav {
+  justify-content: center;
+}
+
+.lightbox__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.lightbox__progress {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+
+  span {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: left;
+    transition: transform var(--dur-s) var(--ease-out);
+  }
+}
+
+.lightbox__btn {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.lightbox__stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding-inline: var(--gutter);
+  overflow: hidden;
+}
+
+.lightbox__frame {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  cursor: zoom-in;
+  animation: lb-photo-in var(--dur-m) var(--ease-out);
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100svh - 9rem);
+    object-fit: contain;
+    transform-origin: var(--ox) var(--oy);
+    transition:
+      transform var(--dur-m) var(--ease-out),
+      transform-origin 0.25s linear;
+  }
+
+  &.is-zoomed {
+    cursor: zoom-out;
+
+    img {
+      transform: scale(2.5);
+    }
+  }
+}
+
+@keyframes lb-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// Foto entra com scale .5 → 1 (abrir) ou deslizando ±25% (anterior/próxima).
+@keyframes lb-photo-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir) * 25%)) scale(var(--from-scale));
+  }
+}

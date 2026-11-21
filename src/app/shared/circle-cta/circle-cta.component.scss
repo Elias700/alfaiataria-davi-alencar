@@ -1,0 +1,65 @@
+@use 'mixins' as *;
+
+:host {
+  display: inline-block;
+}
+
+.circle-cta {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(7.5rem, 6rem + 4vw, 10.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: var(--fg);
+}
+
+svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-60deg);
+  overflow: visible;
+}
+
+circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.circle-cta__base {
+  opacity: 0.28;
+}
+
+.circle-cta__arc {
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-dasharray: calc(var(--c) * 0.0417) var(--c);
+  transition: stroke-dasharray var(--dur-m) var(--ease-in-out);
+}
+
+.circle-cta__arc--b {
+  transform: rotate(180deg);
+  transform-origin: center;
+}
+
+.circle-cta__label {
+  @include label;
+  position: relative;
+  max-width: 7.5em;
+  text-align: center;
+  font-weight: 600;
+}
+
+@include pointer-fine {
+  .circle-cta:hover .circle-cta__arc {
+    stroke-dasharray: calc(var(--c) / 2) var(--c);
+  }
+}
+
+.circle-cta:focus-visible .circle-cta__arc {
+  stroke-dasharray: calc(var(--c) / 2) var(--c);
+}

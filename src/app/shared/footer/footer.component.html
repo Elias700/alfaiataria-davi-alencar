@@ -1,0 +1,103 @@
+<footer class="footer theme-dark" data-bg="dark">
+  <app-marquee
+    class="footer__marquee"
+    [items]="footer.marquee"
+    label="Alfaiataria Davi Alencar"
+    [duration]="40"
+  />
+
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <span class="monogram footer__mono" aria-hidden="true"></span>
+      <p class="h4 footer__tagline" appSplitText="lines">
+        {{ brand.name }}.<br /><span class="italic">{{ brand.tagline }}.</span>
+      </p>
+    </div>
+
+    <nav class="footer__col" aria-labelledby="footer-nav-title">
+      <h2 id="footer-nav-title" class="label footer__title">Navegação</h2>
+      <ul role="list">
+        @for (item of nav; track item.href) {
+          <li>
+            <a class="footer__link link" [appAnchor]="item.href" [href]="item.href">{{
+              item.label
+            }}</a>
+          </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="label footer__title">Contato</h2>
+      <ul role="list">
+        @if (whatsapp) {
+          <li>
+            <a class="footer__link link" [href]="whatsapp" target="_blank" rel="noopener"
+              ><app-icon name="whatsapp" /> WhatsApp</a
+            >
+          </li>
+        }
+        @if (contact.phoneDisplay) {
+          <li>
+            <a class="footer__link link" [href]="phoneHref"
+              ><app-icon name="phone" /> {{ contact.phoneDisplay }}</a
+            >
+          </li>
+        }
+        @if (contact.email) {
+          <li>
+            <a class="footer__link link" [href]="'mailto:' + contact.email"
+              ><app-icon name="mail" /> {{ contact.email }}</a
+            >
+          </li>
+        }
+        @if (contact.instagram) {
+          <li>
+            <a class="footer__link link" [href]="contact.instagram" target="_blank" rel="noopener"
+              ><app-icon name="instagram" /> Instagram</a
+            >
+          </li>
+        }
+        @if (contact.address) {
+          <li class="footer__text">
+            <app-icon name="pin" />
+            <span
+              >{{ contact.address.street }}, {{ contact.address.district }}<br />{{
+                contact.address.city
+              }}
+              – {{ contact.address.state }}</span
+            >
+          </li>
+        }
+        <li>
+          <a class="footer__link link" appAnchor="#agendar" href="#agendar">Agendar atendimento</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h2 class="label footer__title">Legal</h2>
+      <ul role="list">
+        <li>
+          <button type="button" class="footer__link link" (click)="ui.openPrivacy()">
+            Política de privacidade
+          </button>
+        </li>
+        <li>
+          <button type="button" class="footer__link link" (click)="ui.openPrivacy('cookies')">
+            Cookies
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p class="small muted">© {{ year }} {{ brand.name }}. Todos os direitos reservados.</p>
+    <a class="small footer__top link" appAnchor="#inicio" href="#inicio">Voltar ao topo</a>
+  </div>
+
+  <div class="footer__wordmark-wrap" aria-hidden="true">
+    <p class="footer__wordmark" appFitText>{{ footer.wordmark }}</p>
+  </div>
+</footer>

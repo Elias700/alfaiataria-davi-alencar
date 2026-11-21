@@ -1,0 +1,96 @@
+@use 'mixins' as *;
+
+.tabs {
+  display: grid;
+  gap: var(--space-l);
+
+  @include up($bp-md) {
+    grid-template-columns: minmax(11rem, 0.9fr) 1.4fr;
+    align-items: start;
+  }
+}
+
+.tabs__list {
+  position: relative;
+  display: grid;
+  border-left: 1px solid var(--line);
+}
+
+// Indicador que desliza (A33 initTabsHilight): altura de uma aba, deslocado por --idx.
+.tabs__hilight {
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 2px;
+  height: calc(100% / var(--count));
+  background: var(--accent);
+  transform: translateY(calc(var(--idx) * 100%));
+  transition: transform var(--dur-m) var(--ease-in-out);
+}
+
+.tabs__tab {
+  @include label;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: var(--tap);
+  padding: 0.6rem 0 0.6rem 1.25rem;
+  text-align: left;
+  font-weight: 500;
+  color: var(--fg-muted);
+  transition: color var(--dur-s) var(--ease);
+
+  &[aria-selected='true'] {
+    color: var(--fg);
+  }
+
+  @include pointer-fine {
+    &:hover {
+      color: var(--fg);
+    }
+  }
+}
+
+.tabs__num {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabs__panel {
+  min-height: 9rem;
+
+  &:focus-visible {
+    outline-offset: 0.5rem;
+  }
+}
+
+.tabs__content {
+  display: grid;
+  gap: var(--space-s);
+}
+
+// Entrada do conteúdo: título com letras subindo (A4) e texto por máscara (A5), em CSS.
+.tabs__title,
+.tabs__text {
+  overflow: clip;
+
+  span {
+    display: block;
+    animation: tab-in var(--dur-l) var(--ease-out) both;
+  }
+}
+
+.tabs__text {
+  color: var(--fg-muted);
+  max-width: 34ch;
+
+  span {
+    animation-delay: 0.1s;
+  }
+}
+
+@keyframes tab-in {
+  from {
+    transform: translateY(110%);
+  }
+}

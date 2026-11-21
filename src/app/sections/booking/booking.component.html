@@ -1,0 +1,265 @@
+<section id="agendar" class="booking theme-dark" data-bg="dark" aria-labelledby="booking-title">
+  <div #band class="booking__band">
+    <div class="booking__stage">
+      <div #bandImg class="booking__img">
+        <img [ngSrc]="b.photo.src" fill sizes="100vw" [alt]="b.photo.alt" />
+        <div class="booking__shade" aria-hidden="true"></div>
+      </div>
+
+      <div #bandContent class="booking__band-content container">
+        <p class="eyebrow">{{ b.eyebrow }}</p>
+        <h2 id="booking-title" class="h2 section-title booking__title">
+          <span>{{ b.title[0] }}</span>
+          <span>{{ b.title[1] }}</span>
+        </h2>
+        <p class="lead booking__lead">{{ b.text }}</p>
+        <div class="booking__actions">
+          @if (whatsapp) {
+            <a
+              class="btn"
+              [href]="whatsapp"
+              target="_blank"
+              rel="noopener"
+              appMagnetic
+              [magneticStrength]="16"
+            >
+              <app-icon name="whatsapp" />
+              Agendar pelo WhatsApp
+            </a>
+          }
+          <a class="btn" [class.btn--ghost]="whatsapp" appAnchor="#formulario" href="#formulario">
+            Preencher o formulário
+            <app-icon name="arrow-down" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container booking__body">
+    <div #panel class="booking__panel theme-light">
+      <form
+        #formEl
+        id="formulario"
+        class="form"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        aria-labelledby="form-title"
+      >
+        <h3 id="form-title" class="h3">Pedido de agendamento</h3>
+        <p class="small muted">Campos com * são obrigatórios.</p>
+
+        <div class="form__row">
+          <div class="field" [class.is-invalid]="invalid('name')">
+            <input
+              id="f-name"
+              class="field__input"
+              type="text"
+              formControlName="name"
+              autocomplete="name"
+              placeholder=" "
+              required
+              [attr.aria-invalid]="invalid('name')"
+              [attr.aria-describedby]="invalid('name') ? 'f-name-err' : null"
+            />
+            <label class="field__label" for="f-name">Nome *</label>
+            @if (invalid('name')) {
+              <p class="field__error" id="f-name-err">Informe seu nome.</p>
+            }
+          </div>
+
+          <div class="field" [class.is-invalid]="invalid('phone')">
+            <input
+              id="f-phone"
+              class="field__input"
+              type="tel"
+              inputmode="tel"
+              formControlName="phone"
+              autocomplete="tel"
+              placeholder=" "
+              required
+              (input)="sanitizePhone()"
+              [attr.aria-invalid]="invalid('phone')"
+              [attr.aria-describedby]="invalid('phone') ? 'f-phone-err' : 'f-phone-hint'"
+            />
+            <label class="field__label" for="f-phone">Telefone ou WhatsApp *</label>
+            @if (invalid('phone')) {
+              <p class="field__error" id="f-phone-err">Informe um telefone com DDD.</p>
+            } @else {
+              <p class="field__hint" id="f-phone-hint">Com DDD, ex.: (11) 99999-9999</p>
+            }
+          </div>
+        </div>
+
+        <fieldset
+          class="choice"
+          [class.is-invalid]="invalid('interest')"
+          [attr.aria-describedby]="invalid('interest') ? 'f-interest-err' : null"
+        >
+          <legend class="label choice__legend">Tenho interesse em *</legend>
+          <div class="choice__options">
+            @for (opt of b.interests; track opt.value) {
+              <label class="choice__opt">
+                <input
+                  type="radio"
+                  formControlName="interest"
+                  [value]="opt.value"
+                  required
+                  [attr.aria-invalid]="invalid('interest')"
+                />
+                <span>{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+          @if (invalid('interest')) {
+            <p class="field__error" id="f-interest-err">Escolha uma opção.</p>
+          }
+        </fieldset>
+
+        <div class="form__row">
+          <div class="field field--static">
+            <select id="f-occasion" class="field__input" formControlName="occasion">
+              <option value="">Selecione (opcional)</option>
+              @for (o of b.occasions; track o.value) {
+                <option [value]="o.value">{{ o.label }}</option>
+              }
+            </select>
+            <label class="field__label" for="f-occasion">Ocasião</label>
+          </div>
+
+          <div class="field field--static">
+            <input
+              id="f-date"
+              class="field__input"
+              type="date"
+              formControlName="eventDate"
+              [min]="today"
+            />
+            <label class="field__label" for="f-date">Data do evento (opcional)</label>
+          </div>
+        </div>
+
+        <div class="field" [class.is-invalid]="invalid('message')">
+          <textarea
+            id="f-message"
+            class="field__input field__input--area"
+            formControlName="message"
+            rows="4"
+            placeholder=" "
+            maxlength="1000"
+            [attr.aria-invalid]="invalid('message')"
+            [attr.aria-describedby]="invalid('message') ? 'f-message-err' : null"
+          ></textarea>
+          <label class="field__label" for="f-message">Mensagem (opcional)</label>
+          @if (invalid('message')) {
+            <p class="field__error" id="f-message-err">A mensagem pode ter até 1.000 caracteres.</p>
+          }
+        </div>
+
+        <div class="consent" [class.is-invalid]="invalid('consent')">
+          <input
+            id="f-consent"
+            type="checkbox"
+            formControlName="consent"
+            required
+            [attr.aria-invalid]="invalid('consent')"
+            [attr.aria-describedby]="invalid('consent') ? 'f-consent-err' : null"
+          />
+          <label for="f-consent" class="small">
+            Autorizo o uso dos meus dados para que a Alfaiataria Davi Alencar entre em contato sobre
+            este pedido, conforme a
+            <button type="button" class="consent__link" (click)="ui.openPrivacy()">
+              Política de Privacidade</button
+            >. *
+          </label>
+          @if (invalid('consent')) {
+            <p class="field__error" id="f-consent-err">
+              É preciso autorizar o contato para enviar.
+            </p>
+          }
+        </div>
+
+        <button type="submit" class="btn form__submit" [disabled]="status() === 'sending'">
+          {{ status() === 'sending' ? 'Enviando…' : 'Enviar pedido' }}
+          <app-icon name="arrow-right" />
+        </button>
+
+        <div class="form__status" role="status" aria-live="polite">
+          @switch (status()) {
+            @case ('sent') {
+              <p class="form__msg form__msg--ok">
+                Pedido enviado. Vamos retornar para combinar o atendimento.
+              </p>
+            }
+            @case ('error') {
+              <p class="form__msg form__msg--err">
+                Não foi possível enviar agora. Tente novamente em instantes.
+              </p>
+            }
+            @case ('not-configured') {
+              <p class="form__msg">
+                O envio pelo formulário ainda não está ativo.
+                @if (fallbackWhatsapp(); as link) {
+                  <a class="link" [href]="link" target="_blank" rel="noopener"
+                    >Enviar este pedido pelo WhatsApp</a
+                  >
+                }
+              </p>
+            }
+          }
+        </div>
+      </form>
+    </div>
+
+    @if (info.address || info.hours || info.phoneDisplay || info.email || mapUrl) {
+      <aside class="booking__info" aria-label="Informações de contato">
+        @if (info.address) {
+          <div class="info">
+            <app-icon name="pin" />
+            <p>
+              {{ info.address.street }}, {{ info.address.district }}<br />{{ info.address.city }} –
+              {{ info.address.state }}, {{ info.address.postalCode }}
+            </p>
+          </div>
+        }
+        @if (info.hours) {
+          <div class="info">
+            <app-icon name="clock" />
+            <ul role="list">
+              @for (h of info.hours; track h) {
+                <li>{{ h }}</li>
+              }
+            </ul>
+          </div>
+        }
+        @if (info.phoneDisplay) {
+          <div class="info">
+            <app-icon name="phone" />
+            <p>{{ info.phoneDisplay }}</p>
+          </div>
+        }
+        @if (info.email) {
+          <div class="info">
+            <app-icon name="mail" /><a class="link" [href]="'mailto:' + info.email">{{
+              info.email
+            }}</a>
+          </div>
+        }
+        @if (mapUrl) {
+          @defer (on viewport) {
+            <iframe
+              class="booking__map"
+              [src]="mapUrl"
+              title="Mapa da alfaiataria"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          } @placeholder {
+            <div class="booking__map booking__map--placeholder" aria-hidden="true"></div>
+          }
+        }
+      </aside>
+    }
+  </div>
+</section>

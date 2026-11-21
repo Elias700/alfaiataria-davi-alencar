@@ -42,3 +42,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Site de referência clonado: só para estudo local, nunca vai para o repositório (AGENTS.md §3)
+/src/clone/

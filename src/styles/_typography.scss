@@ -1,0 +1,102 @@
+@use 'mixins' as *;
+
+// Fontes hospedadas localmente (OFL), só o subconjunto latin (cobre o português).
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url('/fonts/bodoni-moda-latin.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url('/fonts/bodoni-moda-latin-italic.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/jost-latin.woff2') format('woff2-variations');
+}
+
+body {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.display,
+.h2,
+.h3,
+.h4 {
+  font-family: var(--ff-serif);
+  font-weight: 400;
+  font-optical-sizing: auto;
+}
+
+.display {
+  font-size: var(--fs-display);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.h4 {
+  font-size: var(--fs-h4);
+  line-height: 1.2;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  font-weight: 350;
+}
+
+.label,
+.eyebrow {
+  @include label;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+  color: var(--accent);
+
+  &::before {
+    content: '';
+    width: 2.25rem;
+    height: 1px;
+    background: currentColor;
+  }
+}
+
+.muted {
+  color: var(--fg-muted);
+}
+
+.small {
+  font-size: var(--fs-small);
+}

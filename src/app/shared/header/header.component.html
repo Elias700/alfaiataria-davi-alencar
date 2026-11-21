@@ -1,0 +1,103 @@
+<header
+  #headerEl
+  class="header"
+  appThemeTarget="dark"
+  [class.is-menu-open]="ui.menuOpen()"
+  (keydown)="trapFocus($event)"
+>
+  <a
+    class="header__badge"
+    appAnchor="#inicio"
+    href="#inicio"
+    [attr.aria-label]="brand.name + ' — voltar ao início'"
+    (navigate)="close(false)"
+  >
+    <svg #ring class="header__ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <defs>
+        <path id="badge-circle" d="M50,50 m-39,0 a39,39 0 1,1 78,0 a39,39 0 1,1 -78,0" />
+      </defs>
+      <text>
+        <textPath href="#badge-circle" textLength="243" lengthAdjust="spacing">
+          ALFAIATARIA · DAVI ALENCAR ·
+        </textPath>
+      </text>
+    </svg>
+    <span class="monogram header__mono" aria-hidden="true"></span>
+  </a>
+
+  <nav class="header__nav" aria-label="Principal">
+    <ul role="list">
+      @for (item of navLinks; track item.href) {
+        <li>
+          <a class="header__link roll-trigger" [appAnchor]="item.href" [href]="item.href">
+            <app-roll-text [text]="item.label" />
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="header__actions">
+    <a
+      class="btn header__cta"
+      appAnchor="#agendar"
+      href="#agendar"
+      appMagnetic
+      [magneticStrength]="14"
+      (navigate)="close(false)"
+    >
+      {{ ctaLabel }}
+    </a>
+    <button
+      #toggleBtn
+      type="button"
+      class="header__menu-btn"
+      [attr.aria-expanded]="ui.menuOpen()"
+      aria-controls="menu"
+      (click)="toggle()"
+    >
+      <span class="header__menu-label">{{ ui.menuOpen() ? 'Fechar' : 'Menu' }}</span>
+      <span class="header__burger" aria-hidden="true"><span></span><span></span></span>
+    </button>
+  </div>
+
+  <div
+    #menu
+    id="menu"
+    class="menu theme-dark"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu"
+    [class.is-open]="ui.menuOpen()"
+    [attr.inert]="ui.menuOpen() ? null : ''"
+  >
+    <div class="menu__inner">
+      <span class="monogram monogram--lg menu__watermark" aria-hidden="true"></span>
+      <nav aria-label="Menu principal">
+        <ol class="menu__list" role="list">
+          @for (item of menuLinks; track item.href; let i = $index) {
+            <li class="menu__item" [style.--i]="i">
+              <a
+                class="menu__link"
+                [appAnchor]="item.href"
+                [href]="item.href"
+                (navigate)="close(false)"
+              >
+                <span class="menu__num" aria-hidden="true">{{
+                  (i + 1).toString().padStart(2, '0')
+                }}</span>
+                <span class="menu__label">{{ item.label }}</span>
+              </a>
+            </li>
+          }
+        </ol>
+      </nav>
+      <div class="menu__foot" [style.--i]="menuLinks.length">
+        <p class="label menu__brand">{{ brand.name }}</p>
+        @if (instagram) {
+          <a class="link label" [href]="instagram" target="_blank" rel="noopener">Instagram</a>
+        }
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,233 @@
+@use 'mixins' as *;
+
+.hero {
+  position: relative;
+}
+
+// Área alta para o fluxo de scroll (A10). Sem JS/animação, volta a 100svh.
+.hero__area {
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+
+  :host-context(.js-anim) & {
+    height: 140svh;
+
+    @include up($bp-lg) {
+      height: 180svh;
+    }
+  }
+}
+
+.hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: clip;
+  display: grid;
+  align-content: end;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+
+  // Desktop: a foto (retrato) fica à direita, para o título não cruzar o rosto.
+  @include up($bp-lg) {
+    left: 26%;
+  }
+}
+
+.hero__img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-m) var(--ease-in-out);
+
+  &.is-active {
+    opacity: 1;
+  }
+
+  img {
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
+
+  // Entrada junto com o loader (a imagem do hero vai de 1.12 a 1 enquanto as cortinas abrem).
+  :host-context(html.has-intro) & {
+    animation: hero-img-in 1.5s var(--ease-in-out) 0.55s backwards;
+  }
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(4 11 37 / 0.6) 0%, rgb(4 11 37 / 0) 26%),
+    linear-gradient(0deg, rgb(4 11 37 / 0.94) 0%, rgb(4 11 37 / 0.72) 34%, rgb(4 11 37 / 0) 72%);
+
+  @include up($bp-lg) {
+    background:
+      linear-gradient(180deg, rgb(4 11 37 / 0.55) 0%, rgb(4 11 37 / 0) 24%),
+      linear-gradient(90deg, rgb(4 11 37 / 1) 0%, rgb(4 11 37 / 0.55) 22%, rgb(4 11 37 / 0) 55%),
+      linear-gradient(0deg, rgb(4 11 37 / 0.7) 0%, rgb(4 11 37 / 0) 45%);
+  }
+}
+
+.hero__content {
+  position: relative;
+  display: grid;
+  gap: var(--space-m);
+  padding-bottom: clamp(2rem, 1rem + 5vh, 5rem);
+
+  @include up($bp-lg) {
+    padding-left: calc(var(--gutter) + 2.5rem);
+  }
+}
+
+.hero__h1 {
+  @include label;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  color: var(--c-linen);
+  font-weight: 500;
+}
+
+.hero__h1-sep {
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero__display {
+  font-size: clamp(3.4rem, 1.4rem + 8.6vw, 11rem);
+  margin-left: -0.04em;
+}
+
+.hero__line {
+  display: block;
+
+  &.italic {
+    padding-left: 0.55em;
+  }
+}
+
+.hero__lead {
+  max-width: 34ch;
+  color: var(--fg-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+.hero__tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero__tab {
+  @include label;
+  min-height: var(--tap);
+  padding-inline: 0.25rem;
+  color: var(--fg-muted);
+  font-weight: 600;
+  transition: color var(--dur-s) var(--ease);
+
+  &.is-active {
+    color: var(--fg);
+  }
+}
+
+.hero__tab-divider {
+  width: 3rem;
+  height: 1px;
+  background: var(--line);
+}
+
+.hero__circle {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(2rem, 1rem + 5vh, 5rem);
+  display: none;
+
+  @include up($bp-lg) {
+    display: block;
+  }
+}
+
+// ---------- Entrada do hero (CSS, sem JS) ----------
+// Atraso base: curto em visitas seguintes; maior quando o loader roda (has-intro).
+:host {
+  --intro-base: 0.1s;
+}
+
+:host-context(html.has-intro) {
+  --intro-base: 0.95s;
+}
+
+.hero__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hero__char {
+  display: inline-block;
+  transform-origin: center bottom;
+  animation: char-in var(--dur-l) var(--ease-out) both;
+  animation-delay: calc(var(--intro-base) + var(--i) * 0.05s);
+}
+
+.intro {
+  animation: intro-in var(--dur-l) var(--ease-out) both;
+  animation-delay: calc(var(--intro-base) + var(--d, 0s));
+}
+
+.intro--fade {
+  animation-name: intro-fade;
+}
+
+// h1 e lead: só deslocamento, sem opacidade, para serem pintados já no primeiro frame (LCP).
+.intro--slide {
+  animation-name: intro-slide;
+}
+
+@keyframes char-in {
+  from {
+    opacity: 0;
+    transform: perspective(600px) translateX(0.9em) rotateX(90deg);
+  }
+}
+
+@keyframes intro-in {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+}
+
+@keyframes intro-slide {
+  from {
+    transform: translateY(1.25rem);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-img-in {
+  from {
+    transform: scale(1.12);
+  }
+}

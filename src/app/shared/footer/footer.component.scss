@@ -1,0 +1,103 @@
+@use 'mixins' as *;
+
+.footer {
+  position: relative;
+  padding-top: var(--space-xl);
+  overflow: clip;
+}
+
+.footer__marquee {
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+}
+
+.footer__grid {
+  display: grid;
+  gap: var(--space-l);
+  padding-top: var(--space-xl);
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  }
+}
+
+.footer__brand {
+  display: grid;
+  align-content: start;
+  gap: var(--space-m);
+}
+
+.footer__mono {
+  width: 4.5rem;
+  color: var(--c-gold);
+}
+
+.footer__tagline {
+  max-width: 22ch;
+}
+
+.footer__col {
+  display: grid;
+  align-content: start;
+  gap: var(--space-s);
+
+  ul {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.footer__title {
+  color: var(--accent);
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--tap);
+  text-align: left;
+}
+
+.footer__text {
+  display: flex;
+  gap: 0.6rem;
+  padding-block: 0.6rem;
+  color: var(--fg-muted);
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-top: var(--space-xl);
+  padding-block: var(--space-m);
+  border-top: 1px solid var(--line);
+}
+
+.footer__wordmark-wrap {
+  padding-inline: var(--gutter);
+  overflow: hidden;
+}
+
+.footer__wordmark {
+  margin-bottom: -0.18em;
+  font-family: var(--ff-serif);
+  font-size: 17.5vw; // aproximação para o SSR; a diretiva ajusta à largura exata
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: var(--c-gold);
+  opacity: 0.9;
+  text-align: center;
+}

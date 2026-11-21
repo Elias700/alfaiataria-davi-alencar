@@ -1,0 +1,104 @@
+@use 'mixins' as *;
+
+.modal {
+  width: min(46rem, calc(100vw - 2 * var(--gutter)));
+  max-height: min(85svh, 60rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  overflow: visible;
+  perspective: 1000px;
+
+  &::backdrop {
+    background: rgb(4 11 37 / 0.72);
+    animation: backdrop-in var(--dur-l) var(--ease-out);
+  }
+
+  &[open] .modal__card {
+    animation: modal-in var(--dur-l) var(--ease-out);
+  }
+
+  &.is-closing .modal__card {
+    animation: modal-out var(--dur-m) var(--ease-in) forwards;
+  }
+
+  &.is-closing::backdrop {
+    animation: backdrop-out var(--dur-m) var(--ease-in) forwards;
+  }
+}
+
+.modal__card {
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 2rem 4rem rgb(0 0 0 / 0.35);
+  transform-origin: 50% 0;
+}
+
+.modal__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: var(--space-m) var(--space-m) var(--space-s);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.modal__close {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.modal__body {
+  display: grid;
+  gap: var(--space-m);
+  padding: var(--space-m);
+
+  section {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  p {
+    color: var(--fg-muted);
+  }
+}
+
+// Valores do clone: scale 0, rotateX -90, yPercent -100, rotate -25 → 0 (entrada) e rotateX 90, yPercent 200, rotate 25 (saída).
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-60%) rotateX(-90deg) rotate(-12deg) scale(0.4);
+  }
+}
+
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    transform: translateY(80%) rotateX(90deg) rotate(12deg);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes backdrop-out {
+  to {
+    opacity: 0;
+  }
+}

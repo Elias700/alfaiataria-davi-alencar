@@ -1,0 +1,102 @@
+@use 'mixins' as *;
+
+.faq {
+  border-top: 1px solid var(--line);
+}
+
+.faq__grid {
+  display: grid;
+  gap: var(--space-l);
+
+  @include up($bp-lg) {
+    grid-template-columns: 1fr 1.4fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+}
+
+.faq__aside {
+  display: grid;
+  gap: var(--space-m);
+  justify-items: start;
+
+  @include up($bp-lg) {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+}
+
+.faq__cta {
+  margin-top: var(--space-s);
+}
+
+.faq__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__q {
+  font: inherit;
+}
+
+.faq__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  width: 100%;
+  min-height: var(--tap);
+  padding-block: var(--space-m);
+  text-align: left;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h4);
+  line-height: 1.25;
+}
+
+.faq__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition:
+    transform var(--dur-m) var(--ease-in-out),
+    background-color var(--dur-s) var(--ease),
+    color var(--dur-s) var(--ease);
+
+  .is-open & {
+    transform: rotate(-45deg);
+    background: var(--fg);
+    color: var(--bg);
+  }
+}
+
+.faq__a {
+  padding-bottom: var(--space-m);
+
+  p {
+    max-width: 52ch;
+    overflow: clip;
+    color: var(--fg-muted);
+  }
+
+  span {
+    display: block;
+    animation: answer-in var(--dur-l) var(--ease-out) both;
+  }
+}
+
+@keyframes answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+}

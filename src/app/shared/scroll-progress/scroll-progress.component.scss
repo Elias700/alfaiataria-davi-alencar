@@ -1,0 +1,66 @@
+@use 'mixins' as *;
+
+:host {
+  display: none;
+
+  @include up($bp-lg) {
+    display: block;
+  }
+
+  @include reduced-motion {
+    display: none;
+  }
+}
+
+.rail {
+  position: fixed;
+  left: clamp(1.1rem, 0.4rem + 1vw, 2rem);
+  top: calc(var(--header-h) + 6rem);
+  bottom: 2rem;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 2rem;
+  pointer-events: none;
+  background-color: transparent;
+  color: var(--fg);
+  transition: color var(--dur-s) var(--ease);
+}
+
+.rail__count {
+  @include label;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.rail__track {
+  position: relative;
+  flex: 1;
+  width: 1px;
+  background: var(--line);
+}
+
+.rail__fill {
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.rail__hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity var(--dur-m) var(--ease-in-out);
+}
+
+.rail__label {
+  @include label;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 600;
+}
