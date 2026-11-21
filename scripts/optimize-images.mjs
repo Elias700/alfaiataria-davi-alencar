@@ -7,7 +7,7 @@ import { existsSync } from 'node:fs';
 
 const SRC = 'assets-src';
 const OUT = 'public/images';
-const WIDTHS = [480, 768, 1080, 1440, 1920];
+const WIDTHS = [480, 768, 1080, 1440, 1920, 2560];
 const NAVY = '#040b25';
 
 /** Fotos de conteúdo: nome de saída → arquivo original. */
@@ -30,19 +30,69 @@ const PHOTOS = {
   'atelie-tecidos-e-ferramentas': 'atelie-tecidos-e-ferramentas.png',
 };
 
+/**
+ * Recortes feitos direto dos originais em alta resolução (em vez de zoom via CSS, que estica pixels).
+ * cx/cy: centro do recorte (fração do original) · w: largura (fração) · aspect: largura/altura.
+ */
+const CROPS = {
+  // Janela em tela cheia da seção "A camisa": colarinho, gravata e fita métrica.
+  'camisa-branca-colarinho-panoramica': {
+    file: 'davi-terno-cinza-fita-metrica-sorrindo.jpg',
+    cx: 0.5,
+    cy: 0.62,
+    w: 1,
+    aspect: 1.6,
+  },
+  // Texturas da seção "O toque vem primeiro" (quadro 4:5).
+  'textura-xadrez-azul': {
+    file: 'davi-terno-azul-xadrez-atelie.jpg',
+    cx: 0.5,
+    cy: 0.74,
+    w: 0.34,
+    aspect: 0.8,
+  },
+  'textura-cinza-lapela': {
+    file: 'terno-cinza-colete-trespassado-detalhe.jpg',
+    cx: 0.2,
+    cy: 0.22,
+    w: 0.34,
+    aspect: 0.8,
+  },
+  'textura-camisa-branca-gravata': {
+    file: 'davi-terno-cinza-fita-metrica.jpg',
+    cx: 0.5,
+    cy: 0.56,
+    w: 0.36,
+    aspect: 0.8,
+  },
+};
+
+/** Gera todas as larguras: quando o original é menor, o arquivo da largura maior recebe o
+ * original sem ampliar, para o loader (app.config.ts) nunca apontar para um arquivo inexistente. */
+async function writeWidths(name, makeInput) {
+  for (const w of WIDTHS) {
+    await (await makeInput())
+      .resize({ width: w, withoutEnlargement: true })
+      .webp({ quality: 80, effort: 6, smartSubsample: true })
+      .toFile(`${OUT}/${name}-${w}.webp`);
+  }
+  console.log('foto', name);
+}
+
 async function photos() {
   for (const [name, file] of Object.entries(PHOTOS)) {
-    const input = `${SRC}/${file}`;
-    // Gera todas as larguras: quando o original é menor, o arquivo da largura maior recebe o
-    // original sem ampliar, para o loader (app.config.ts) nunca apontar para um arquivo inexistente.
-    for (const w of WIDTHS) {
-      await sharp(input)
-        .rotate()
-        .resize({ width: w, withoutEnlargement: true })
-        .webp({ quality: 74, effort: 6, smartSubsample: true })
-        .toFile(`${OUT}/${name}-${w}.webp`);
-    }
-    console.log('foto', name);
+    await writeWidths(name, () => sharp(`${SRC}/${file}`).rotate());
+  }
+  for (const [name, c] of Object.entries(CROPS)) {
+    const input = `${SRC}/${c.file}`;
+    const { width: W = 0, height: H = 0 } = await sharp(input).metadata();
+    const width = Math.round(W * c.w);
+    const height = Math.round(width / c.aspect);
+    const left = Math.max(0, Math.min(W - width, Math.round(W * c.cx - width / 2)));
+    const top = Math.max(0, Math.min(H - height, Math.round(H * c.cy - height / 2)));
+    // Extrai para buffer antes de redimensionar (sharp aplica extract/resize numa ordem fixa).
+    const cropped = await sharp(input).rotate().extract({ left, top, width, height }).toBuffer();
+    await writeWidths(name, () => sharp(cropped));
   }
 }
 

@@ -140,6 +140,31 @@ export const PHOTOS = {
     height: 1536,
     alt: 'Amostras de tecido azul-marinho com risca de giz e espinha de peixe, fita métrica, giz de alfaiate, botões dourados e tesoura',
   },
+  // Recortes em alta resolução gerados por scripts/optimize-images.mjs (CROPS).
+  shirtCollarWide: {
+    src: 'camisa-branca-colarinho-panoramica',
+    width: 2560,
+    height: 1600,
+    alt: 'Camisa branca sob medida de colarinho estruturado, com gravata verde estampada, terno cinza e fita métrica de alfaiate sobre os ombros',
+  },
+  textureBlueCheck: {
+    src: 'textura-xadrez-azul',
+    width: 1365,
+    height: 1706,
+    alt: 'Textura: colete azul com xadrez discreto e botões',
+  },
+  textureGreyLapel: {
+    src: 'textura-cinza-lapela',
+    width: 1365,
+    height: 1706,
+    alt: 'Textura: lapela de terno cinza com o pesponto à mostra',
+  },
+  textureWhiteShirt: {
+    src: 'textura-camisa-branca-gravata',
+    width: 1446,
+    height: 1808,
+    alt: 'Textura: colarinho de camisa branca com gravata verde estampada',
+  },
 } as const satisfies Record<string, Photo>;
 
 // ---------------------------------------------------------------------------
@@ -214,7 +239,7 @@ export const HERO = {
   display: ['Feito', 'para você.'],
   lead: 'Cada peça nasce das suas medidas, da sua postura e da ocasião que você tem pela frente.',
   tabs: [
-    { id: 'ternos', label: 'Ternos', photo: PHOTOS.daviBlueCheck },
+    { id: 'ternos', label: 'Ternos', photo: PHOTOS.daviNavySuit },
     { id: 'camisas', label: 'Camisas', photo: PHOTOS.shirtStriped },
   ],
   scrollHint: 'Role',
@@ -285,8 +310,8 @@ export const SHIRTS = {
   eyebrow: 'Camisas sob medida',
   title: ['A camisa', 'que veste certo.'],
   text: 'Colarinho no ponto, punho na medida do pulso e um caimento que não sobra nem aperta. A camisa sob medida acompanha o terno ou vai sozinha, com a mesma atenção.',
-  /** Foto da "janela" em tela cheia: a listrada tem mais resolução que a azul-marinho. */
-  photo: PHOTOS.shirtStriped,
+  /** Foto da "janela" em tela cheia: recorte panorâmico de 2560 px do ensaio. */
+  photo: PHOTOS.shirtCollarWide,
   detailPhoto: PHOTOS.shirtNavy,
   /** TODO: confirmar cada opção de personalização com o cliente. */
   options: [
@@ -343,23 +368,14 @@ export const FABRICS = {
   text: 'O tecido define o caimento, o conforto e a ocasião. A escolha é feita no atendimento, olhando e sentindo cada opção.',
   /** Texturas visíveis nas fotos (não citam tecelagens nem composições não confirmadas). */
   textures: [
+    // Recortes já em alta resolução: sem zoom via CSS, para não esticar pixels.
+    { photo: PHOTOS.textureBlueCheck, label: 'Xadrez discreto em azul', position: '50% 50%', zoom: 1 },
+    { photo: PHOTOS.textureGreyLapel, label: 'Cinza para ternos', position: '50% 50%', zoom: 1 },
     {
-      photo: PHOTOS.daviBlueCheck,
-      label: 'Xadrez discreto em azul',
-      position: '34% 86%',
-      zoom: 3.2,
-    },
-    {
-      photo: PHOTOS.greyVestDetail,
-      label: 'Cinza para ternos',
-      position: '20% 20%',
-      zoom: 3.2,
-    },
-    {
-      photo: PHOTOS.shirtNavy,
-      label: 'Listra fina em azul-marinho',
-      position: '22% 78%',
-      zoom: 1.5,
+      photo: PHOTOS.textureWhiteShirt,
+      label: 'Camisa branca e gravata',
+      position: '50% 50%',
+      zoom: 1,
     },
   ],
   /** TODO: tecidos/tecelagens que a alfaiataria trabalha (ex.: lã fria, linho, algodão egípcio). Não exibidos até confirmação. */

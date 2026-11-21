@@ -7,7 +7,7 @@ import {
 import { IMAGE_CONFIG, IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
 
 /** Larguras geradas por scripts/optimize-images.mjs. */
-export const IMAGE_WIDTHS = [480, 768, 1080, 1440, 1920] as const;
+export const IMAGE_WIDTHS = [480, 768, 1080, 1440, 1920, 2560] as const;
 
 /**
  * Loader do NgOptimizedImage: `ngSrc="davi-terno-cinza-tesoura"` vira
